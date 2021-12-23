@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-//import Particles from 'react-tsparticles';
 import Clarifai from 'clarifai';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
@@ -42,6 +41,7 @@ class App extends Component {
 		// State for the whole application
 		this.state = {
 			input: '',
+			imageUrl: ''
 		};
 	}
 
@@ -55,15 +55,17 @@ class App extends Component {
 	// Detect Face Submit button
 	onBtnSubmit = () => {
 		console.log(this.state.input);
+		this.setState({imageUrl: this.state.input})
 
 		app.models
 			.predict(
 				Clarifai.FACE_DETECT_MODEL,
-				'https://samples.clarifai.com/face-det.jpg'
+				this.state.input
 			)
 			.then(
 				function (response) {
-					console.log(response);
+					let boundingBox = response.outputs[0].data.regions[0].region_info.bounding_box;
+					console.log(boundingBox);
 				},
 				function (err) {
 					console.log(err);
@@ -83,7 +85,7 @@ class App extends Component {
 					onInputChange={this.onInputChange}
 					onBtnSubmit={this.onBtnSubmit}
 				/>
-				<FaceRecognition />
+				<FaceRecognition imageUrl={this.state.imageUrl} />
 			</div>
 		);
 	}
