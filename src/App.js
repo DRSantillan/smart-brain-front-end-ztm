@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
 //import Particles from 'react-tsparticles';
+import Clarifai from 'clarifai';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import Rank from './components/Rank/Rank';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
+
+const app = new Clarifai.App({
+	apiKey: '889a201a71cd40498bbe4ff050e39308',
+});
+
+// Particle Options object for React Particles
 const particlesOptions = {
 	particles: {
 		number: {
@@ -48,6 +55,20 @@ class App extends Component {
 	// Detect Face Submit button
 	onBtnSubmit = () => {
 		console.log(this.state.input);
+
+		app.models
+			.predict(
+				Clarifai.FACE_DETECT_MODEL,
+				'https://samples.clarifai.com/face-det.jpg'
+			)
+			.then(
+				function (response) {
+					console.log(response);
+				},
+				function (err) {
+					console.log(err);
+				}
+			);
 	};
 
 	// Render the Application
