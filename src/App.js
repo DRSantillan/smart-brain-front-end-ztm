@@ -28,7 +28,29 @@ const particlesOptions = {
 		},
 	},
 };
+
 class App extends Component {
+	constructor() {
+		super();
+		// State for the whole application
+		this.state = {
+			input: '',
+		};
+	}
+
+	// Event Listeners
+	// Listen for changes in the input text field and update the state once entered
+	onInputChange = (event) => {
+		let input = event.target.value;
+		this.setState({ input });
+	};
+
+	// Detect Face Submit button
+	onBtnSubmit = () => {
+		console.log(this.state.input);
+	};
+
+	// Render the Application
 	render() {
 		return (
 			<div className='App'>
@@ -36,7 +58,10 @@ class App extends Component {
 				<Navigation />
 				<Logo />
 				<Rank />
-				<ImageLinkForm />
+				<ImageLinkForm
+					onInputChange={this.onInputChange}
+					onBtnSubmit={this.onBtnSubmit}
+				/>
 				<FaceRecognition />
 			</div>
 		);
