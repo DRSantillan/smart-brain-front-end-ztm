@@ -56,6 +56,7 @@ class App extends Component {
 			isSignedIn: false,
 		};
 	}
+	//
 
 	// Functions ---------------------------------------- //
 	calculateFaceLocation = (data) => {
