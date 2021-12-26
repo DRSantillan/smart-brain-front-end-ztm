@@ -57,7 +57,11 @@ class App extends Component {
 		};
 	}
 	//
-
+	// componentDidMount() {
+	// 	fetch('http://localhost:8000').then((response) => response.json())
+	// 	.then(console.log);
+		
+	// }
 	// Functions ---------------------------------------- //
 	calculateFaceLocation = (data) => {
 		// Get the image to find out the dimensions for bounding box manipulation
