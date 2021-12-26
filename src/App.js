@@ -86,13 +86,15 @@ class App extends Component {
 	};
 	loadUser = (user) => {
 		console.log('user', user);
-		this.setState({user: {
-			id: user.id,
-			name: user.name,
-			email: user.email,
-			entries: 0,
-			joined: user.joined
-		}})
+		this.setState({
+			user: {
+				id: user.id,
+				name: user.name,
+				email: user.email,
+				entries: 0,
+				joined: user.joined,
+			},
+		});
 	};
 	// set state of bounding box and display
 	updateBoxStateAndDisplay = (box) => {
@@ -119,6 +121,16 @@ class App extends Component {
 				let boundingBox =
 					response.outputs[0].data.regions[0].region_info
 						.bounding_box;
+
+				fetch('http://localhost:8000/image', {
+					method: 'put',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ id: this.state.user.id }),
+				})
+					.then((response) => response.json())
+					.then((count) => {
+						this.setState(Object.assign(this.state.user, { entries: count }));
+					});
 				// Update the box state with the response object for display on the ui.
 				this.updateBoxStateAndDisplay(
 					this.calculateFaceLocation(boundingBox)
@@ -153,7 +165,10 @@ class App extends Component {
 				{route === 'home' ? (
 					<>
 						<Logo />
-						<Rank name={this.state.user.name} entries={this.state.user.entries} />
+						<Rank
+							name={this.state.user.name}
+							entries={this.state.user.entries}
+						/>
 						<ImageLinkForm
 							onInputChange={this.onInputChange}
 							onBtnSubmit={this.onBtnSubmit}
@@ -161,9 +176,15 @@ class App extends Component {
 						<FaceRecognition box={box} imageUrl={imageUrl} />
 					</>
 				) : route === 'signin' ? (
-					<SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+					<SignIn
+						loadUser={this.loadUser}
+						onRouteChange={this.onRouteChange}
+					/>
 				) : (
-					<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+					<Register
+						loadUser={this.loadUser}
+						onRouteChange={this.onRouteChange}
+					/>
 				)}
 			</div>
 		);
