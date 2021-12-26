@@ -54,13 +54,20 @@ class App extends Component {
 			box: {},
 			route: 'signin',
 			isSignedIn: false,
+			user: {
+				id: '',
+				name: '',
+				email: '',
+				entries: '',
+				joined: '',
+			},
 		};
 	}
 	//
 	// componentDidMount() {
 	// 	fetch('http://localhost:8000').then((response) => response.json())
 	// 	.then(console.log);
-		
+
 	// }
 	// Functions ---------------------------------------- //
 	calculateFaceLocation = (data) => {
@@ -77,7 +84,16 @@ class App extends Component {
 			bottom_row: imageHeight - data.bottom_row * imageHeight,
 		};
 	};
-
+	loadUser = (user) => {
+		console.log('user', user);
+		this.setState({user: {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			entries: 0,
+			joined: user.joined
+		}})
+	};
 	// set state of bounding box and display
 	updateBoxStateAndDisplay = (box) => {
 		this.setState({ box });
@@ -137,7 +153,7 @@ class App extends Component {
 				{route === 'home' ? (
 					<>
 						<Logo />
-						<Rank />
+						<Rank name={this.state.user.name} entries={this.state.user.entries} />
 						<ImageLinkForm
 							onInputChange={this.onInputChange}
 							onBtnSubmit={this.onBtnSubmit}
@@ -145,9 +161,9 @@ class App extends Component {
 						<FaceRecognition box={box} imageUrl={imageUrl} />
 					</>
 				) : route === 'signin' ? (
-					<SignIn onRouteChange={this.onRouteChange} />
+					<SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
 				) : (
-					<Register onRouteChange={this.onRouteChange} />
+					<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
 				)}
 			</div>
 		);

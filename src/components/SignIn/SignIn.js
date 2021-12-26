@@ -20,18 +20,19 @@ class SignIn extends Component {
 	onSubmitSignIn = () => {
 		fetch('http://localhost:8000/signin', {
 			method: 'post',
-			headers: {'Content-Type': 'application/json'},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				email: this.state.signInEmail,
-				password: this.state.signInPassword
-			})
+				password: this.state.signInPassword,
+			}),
 		})
-		.then(response => response.json())
-		.then(data => {
-			if(data === 'success'){
-				this.props.onRouteChange('home');
-			}
-		})
+			.then((response) => response.json())
+			.then((user) => {
+				if (user.id) {
+					this.props.loadUser(user);
+					this.props.onRouteChange('home');
+				}
+			});
 		console.log(this.state);
 	};
 	render() {
