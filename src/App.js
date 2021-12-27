@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 
 // Local Components ---------------------------------------- //
 import Navigation from './components/Navigation/Navigation';
@@ -15,10 +14,7 @@ import Register from './components/Register/Register';
 import './App.css';
 
 // Global Variables ---------------------------------------- //
-// Clarifai Data for accessing the API
-const app = new Clarifai.App({
-	apiKey: '889a201a71cd40498bbe4ff050e39308',
-});
+
 
 // Particle Options object for React Particles
 const particlesOptions = {
@@ -42,26 +38,26 @@ const particlesOptions = {
 		},
 	},
 };
-
+const initialState = {
+	input: '',
+	imageUrl: '',
+	box: {},
+	route: 'signin',
+	isSignedIn: false,
+	user: {
+		id: '',
+		name: '',
+		email: '',
+		entries: '',
+		joined: '',
+	},
+};
 // Smart Brain Application
 class App extends Component {
 	constructor() {
 		super();
 		// State for the whole application
-		this.state = {
-			input: '',
-			imageUrl: '',
-			box: {},
-			route: 'signin',
-			isSignedIn: false,
-			user: {
-				id: '',
-				name: '',
-				email: '',
-				entries: '',
-				joined: '',
-			},
-		};
+		this.state = initialState;
 	}
 
 	// Functions ---------------------------------------- //
@@ -107,9 +103,14 @@ class App extends Component {
 		// update the state of the imageurl
 		this.setState({ imageUrl: this.state.input });
 
-		// send a call to the api with the image for processing
-		app.models
-			.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+		fetch('http://localhost:8000/imageurl', {
+			method: 'post',
+			headers: {'Content-type': 'application/json'},
+			body: JSON.stringify({
+				input: this.state.input
+			})
+		})
+		.then(response => response.json())
 			.then((response) => {
 				// store this returned data for processing later
 				let boundingBox =
@@ -128,7 +129,7 @@ class App extends Component {
 								entries: user.entries,
 							})
 						);
-					});
+					}).catch(console.log)
 				// Update the box state with the response object for display on the ui.
 				this.updateBoxStateAndDisplay(
 					this.calculateFaceLocation(boundingBox)
@@ -141,7 +142,7 @@ class App extends Component {
 	onRouteChange = (route) => {
 		//check to see if the route is signed in or not and process accordingly
 		if (route === 'signout') {
-			this.setState({ isSignedIn: false });
+			this.setState({ initialState);
 		} else if (route === 'home') {
 			this.setState({ isSignedIn: true });
 		}
