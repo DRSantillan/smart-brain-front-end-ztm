@@ -63,12 +63,7 @@ class App extends Component {
 			},
 		};
 	}
-	//
-	// componentDidMount() {
-	// 	fetch('http://localhost:8000').then((response) => response.json())
-	// 	.then(console.log);
 
-	// }
 	// Functions ---------------------------------------- //
 	calculateFaceLocation = (data) => {
 		// Get the image to find out the dimensions for bounding box manipulation
@@ -85,13 +80,12 @@ class App extends Component {
 		};
 	};
 	loadUser = (user) => {
-		console.log('user', user);
 		this.setState({
 			user: {
 				id: user.id,
 				name: user.name,
 				email: user.email,
-				entries: 0,
+				entries: user.entries,
 				joined: user.joined,
 			},
 		});
@@ -128,8 +122,12 @@ class App extends Component {
 					body: JSON.stringify({ id: this.state.user.id }),
 				})
 					.then((response) => response.json())
-					.then((count) => {
-						this.setState(Object.assign(this.state.user, { entries: count }));
+					.then((user) => {
+						this.setState(
+							Object.assign(this.state.user, {
+								entries: user.entries,
+							})
+						);
 					});
 				// Update the box state with the response object for display on the ui.
 				this.updateBoxStateAndDisplay(
