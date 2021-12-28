@@ -15,7 +15,6 @@ import './App.css';
 
 // Global Variables ---------------------------------------- //
 
-
 // Particle Options object for React Particles
 const particlesOptions = {
 	particles: {
@@ -103,21 +102,21 @@ class App extends Component {
 		// update the state of the imageurl
 		this.setState({ imageUrl: this.state.input });
 
-		fetch('http://localhost:8000/imageurl', {
+		fetch('https://mysterious-waters-29165.herokuapp.com/imageurl', {
 			method: 'post',
-			headers: {'Content-type': 'application/json'},
+			headers: { 'Content-type': 'application/json' },
 			body: JSON.stringify({
-				input: this.state.input
-			})
+				input: this.state.input,
+			}),
 		})
-		.then(response => response.json())
+			.then((response) => response.json())
 			.then((response) => {
 				// store this returned data for processing later
 				let boundingBox =
 					response.outputs[0].data.regions[0].region_info
 						.bounding_box;
 
-				fetch('http://localhost:8000/image', {
+				fetch('https://mysterious-waters-29165.herokuapp.com/image', {
 					method: 'put',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ id: this.state.user.id }),
@@ -129,7 +128,8 @@ class App extends Component {
 								entries: user.entries,
 							})
 						);
-					}).catch(console.log)
+					})
+					.catch(console.log);
 				// Update the box state with the response object for display on the ui.
 				this.updateBoxStateAndDisplay(
 					this.calculateFaceLocation(boundingBox)
@@ -140,7 +140,7 @@ class App extends Component {
 
 	// Route change function
 	onRouteChange = (route) => {
-		console.log(route ,  'route')
+		console.log(route, 'route');
 		//check to see if the route is signed in or not and process accordingly
 		if (route === 'signout') {
 			this.setState(initialState);
@@ -154,7 +154,7 @@ class App extends Component {
 	render() {
 		// destructure state items to minimize the code
 		const { isSignedIn, imageUrl, route, box } = this.state;
-		console.log(isSignedIn, ' inside render')
+		console.log(isSignedIn, ' inside render');
 		return (
 			<div className='App'>
 				<Particles className='particles' params={particlesOptions} />
