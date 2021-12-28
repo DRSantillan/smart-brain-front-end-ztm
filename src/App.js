@@ -140,9 +140,10 @@ class App extends Component {
 
 	// Route change function
 	onRouteChange = (route) => {
+		console.log(route ,  'route')
 		//check to see if the route is signed in or not and process accordingly
 		if (route === 'signout') {
-			this.setState({ initialState);
+			this.setState(initialState);
 		} else if (route === 'home') {
 			this.setState({ isSignedIn: true });
 		}
@@ -153,7 +154,7 @@ class App extends Component {
 	render() {
 		// destructure state items to minimize the code
 		const { isSignedIn, imageUrl, route, box } = this.state;
-
+		console.log(isSignedIn, ' inside render')
 		return (
 			<div className='App'>
 				<Particles className='particles' params={particlesOptions} />
