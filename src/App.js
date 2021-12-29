@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Particles from 'react-particles-js';
-
+//import Particles from 'react-particles-js';
+import Particles from 'react-tsparticles';
 // Local Components ---------------------------------------- //
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
@@ -17,25 +17,37 @@ import './App.css';
 
 // Particle Options object for React Particles
 const particlesOptions = {
+	fpsLimit: 30,
 	particles: {
+		links: {
+			color: '#ffffff',
+			distance: 250,
+			enable: true,
+			opacity: 0.3,
+			width: 1,
+		},
+		move: {
+			enable: true,
+		},
 		number: {
-			value: 50,
 			density: {
-				enable: true,
-				value_area: 800,
+				enable: false,
+				area: 800,
 			},
+			value: 80,
 		},
 		opacity: {
-			value: 0.5,
+			value: 0.1,
 		},
 		shape: {
-			type: 'circle',
+			type: 'star',
 		},
 		size: {
 			random: true,
-			value: 5,
+			value: 40,
 		},
 	},
+	detectRetina: true,
 };
 const initialState = {
 	input: '',
@@ -140,7 +152,6 @@ class App extends Component {
 
 	// Route change function
 	onRouteChange = (route) => {
-		
 		//check to see if the route is signed in or not and process accordingly
 		if (route === 'signout') {
 			this.setState(initialState);
